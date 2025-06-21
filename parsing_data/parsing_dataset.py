@@ -71,13 +71,16 @@ table_2 = extract_table(image2)
 #с 13-18 дубликаты - удаляем
 combined_table = pd.concat([table_1, table_2], ignore_index=True)
 combined_table = combined_table.drop(index=range(13, 19)).reset_index(drop=True)
+combined_table[0] = combined_table[0].replace('1051', '105,1')
 combined_table[1] = combined_table[1].replace('1159', '115,9')
+combined_table[1] = combined_table[1].replace('1112', '111,2')
 combined_table[2] = combined_table[2].replace('1131', '113,1')
 combined_table[2] = combined_table[2].replace('12,7', '112,7')
 combined_table[2] = combined_table[2].replace('1169', '116,9')
 combined_table[2] = combined_table[2].replace('12,5', '112,5')
 
-# Перекидываем в csv
+print(combined_table)
+#Перекидываем в csv
 combined_table.to_csv(r"C:\Users\Vitaliy\PycharmProjects\test_work\csv_result\data.csv", index=False, header=False, encoding="utf-8-sig")
+print('Данные перенесены в csv')
 
-print('результаты перенесены в csv')
