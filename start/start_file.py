@@ -51,7 +51,7 @@ def parse_data_from_image(image_path: str) -> pd.DataFrame:
     })
     return df
 
-# === 3. Загрузка в БД ===
+# === Загрузка в БД ===
 def load_data_to_db(df: pd.DataFrame):
     """Загружает DataFrame в PostgreSQL"""
     engine = create_engine(
