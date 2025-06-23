@@ -27,7 +27,7 @@ region_table = Table(
     Column('index_prev_month', Float),
     Column('index_same_month_last_year', Float),
     Column('index_period_last_year', Float),
-    schema='public'
+    schema='pictures_data'
 )
 
 # Создаем таблицу, если не существует
@@ -61,7 +61,6 @@ df = df.dropna(subset=["index_prev_month", "index_same_month_last_year", "index_
 print(f"Будет вставлено строк: {len(df)}")
 print(df.head())
 
-# Вставка данных в базу
 try:
     with engine.begin() as connection:
         # Можно очистить таблицу перед вставкой, если нужно:
@@ -73,7 +72,8 @@ try:
             if_exists='append',
             index=False,
             method='multi',
-            chunksize=1000
+            chunksize=1000,
+            schema='pictures_data'
         )
     print("Данные успешно вставлены")
 except Exception as e:
