@@ -3,11 +3,11 @@ import pytesseract
 import pandas as pd
 import os
 
-# Указываем путь к tesseract.exe
+# Укажите путь к tesseract.exe
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 os.environ["TESSDATA_PREFIX"] = r"C:\\Program Files\\Tesseract-OCR/rus.traineddata"
 
-# Функция предобработки изображения
+
 def preprocess_image(path):
     """Открытие и предобработка изображения"""
     img = Image.open(path).convert("L")  # grayscale
@@ -17,7 +17,7 @@ def preprocess_image(path):
     img = img.point(lambda p: 255 if p > 180 else 0)  # бинаризация
     return img
 
-# Функция извлечения таблицы из изображения
+
 def extract_table(image):
     """Извлечение текста и построение таблицы"""
     df = pytesseract.image_to_data(image, lang="eng+rus", output_type=pytesseract.Output.DATAFRAME)
@@ -55,20 +55,20 @@ def extract_table(image):
 
     return pd.DataFrame(grid)
 
-# Пути к изображениям
+# Укажите путь к png
 path_1 = r"C:\Users\Vitaliy\PycharmProjects\test_work\png\grid.png"
 path_2 = r"C:\Users\Vitaliy\PycharmProjects\test_work\png\grid_2.png"
 
-# Обработка изображений
+
 image1 = preprocess_image(path_1)
 image2 = preprocess_image(path_2)
 
-# Извлечение таблиц
 table_1 = extract_table(image1)
 table_2 = extract_table(image2)
 
+
 # Объединение таблиц + очистка от дубликатов
-#с 13-18 дубликаты - удаляем
+# C 13-18 дубликаты - удаляем
 combined_table = pd.concat([table_1, table_2], ignore_index=True)
 combined_table = combined_table.drop(index=range(13, 19)).reset_index(drop=True)
 combined_table[0] = combined_table[0].replace('1051', '105,1')
@@ -79,7 +79,9 @@ combined_table[2] = combined_table[2].replace('12,7', '112,7')
 combined_table[2] = combined_table[2].replace('1169', '116,9')
 combined_table[2] = combined_table[2].replace('12,5', '112,5')
 
-print(combined_table)
+#Перед преобразованием в csv - проверить данные
+#print(combined_table)
+
 #Перекидываем в csv
 combined_table.to_csv(r"C:\Users\Vitaliy\PycharmProjects\test_work\csv_result\data.csv", index=False, header=False, encoding="utf-8-sig")
 print('Данные перенесены в csv')
